@@ -1,0 +1,15 @@
+<div class="homepage">
+    @if(products?.data){
+    <div class="container">
+        @for (product of products?.data.slice(0,count); track $index) {
+        <app-render-product [product]="product"></app-render-product>
+        }
+    </div>
+    <div class="see-more-container">
+        <button class="see-more-button" (click)="handleClick()">see more</button>
+    </div>
+    }
+    @else {
+    <app-loading></app-loading>
+    }
+</div>
