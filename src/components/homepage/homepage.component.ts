@@ -10,16 +10,35 @@ import { RenderProductComponent } from '../render-product/render-product.compone
   styleUrl: './homepage.component.css',
 })
 export class HomepageComponent implements OnInit {
-  products: any;
-  count: number = 10;
+  products: any[] = [];
+  skip: number = 0;
+  loading: boolean = false;
   constructor(private productService: ProductService) {}
-  ngOnInit(): void {
-    this.productService.getAllProducts().subscribe((data) => {
-      this.products = data;
-    });
-  }
 
-  handleClick() {
-    this.count += 10;
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+  loadProducts(): void {
+    this.loading = true;
+    this.productService.getAllProducts(this.skip).subscribe(
+      (response: any) => {
+        this.products = [...this.products, ...response.data];
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error loading products:', error);
+        this.loading = false;
+      }
+    );
+  }
+  // ngOnInit(): void {
+  //   this.productService.getAllProducts(this.skip).subscribe((data) => {
+  //     this.products = data;
+  //   });
+  // }
+
+  handleClick(): void {
+    this.skip += 8; // Skip the next set of products
+    this.loadProducts(); // Load the next batch of products
   }
 }
